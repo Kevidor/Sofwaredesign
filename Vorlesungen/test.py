@@ -74,7 +74,7 @@ def run_evolution(
     for i in range(generation_limit):
         population = sorted(
             population,
-            key= lambda genome: fitness_func(generate_genome),
+            key= lambda genome: fitness_func(genome),
             reverse= True
         )
 
