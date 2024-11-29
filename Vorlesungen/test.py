@@ -68,7 +68,7 @@ def run_evolution(
         crossover_func: CrossoverFunc = single_point_crossover,
         mutation_func: MutationFunc = mutation,
         generation_limit: int = 100
-) -> Tuple[Population, int]:
+    ) -> Tuple[Population, int]:
     population = populate_func()
 
     for i in range(generation_limit):
@@ -115,3 +115,14 @@ def run_evolution(
             fitness, things=things, weightlimit=max_weight
         )
     )
+
+    def genome_to_things(genome: Genome, things: List[Thing]) -> List[Thing]:
+        result = []
+        for i, thing in enumerate(things):
+            if genome[i] == 1:
+                result += [thing]
+        
+        return result
+
+    print(f"Numbers of Gens: {generation}")
+    print(f"Best Solution: {genome_to_things(population[0], things)}")
