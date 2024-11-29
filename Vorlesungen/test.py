@@ -100,29 +100,29 @@ def run_evolution(
         return population
     
 
-    max_weight = 15
-    weights =  [12, 2, 1, 4, 1]
-    values =  [4, 2, 1, 10, 2]
+max_weight = 15
+weights =  [12, 2, 1, 4, 1]
+values =  [4, 2, 1, 10, 2]
 
-    for i, j in zip(values, weights):
-        things.append(Thing(i, j))
+for i, j in zip(values, weights):
+    things.append(Thing(i, j))
 
-    population, generation = run_evolution(
-        populate_func=partial(
-            generate_population, size= 10, genome_length= len(things)
-        ),
-        fitness_func=partial(
-            fitness, things=things, weightlimit=max_weight
-        )
+population, generation = run_evolution(
+    populate_func=partial(
+        generate_population, size= 10, genome_length= len(things)
+    ),
+    fitness_func=partial(
+        fitness, things=things, weightlimit=max_weight
     )
+)
 
-    def genome_to_things(genome: Genome, things: List[Thing]) -> List[Thing]:
-        result = []
-        for i, thing in enumerate(things):
-            if genome[i] == 1:
-                result += [thing]
-        
-        return result
+def genome_to_things(genome: Genome, things: List[Thing]) -> List[Thing]:
+    result = []
+    for i, thing in enumerate(things):
+        if genome[i] == 1:
+            result += [thing]
+    
+    return result
 
-    print(f"Numbers of Gens: {generation}")
-    print(f"Best Solution: {genome_to_things(population[0], things)}")
+print(f"Numbers of Gens: {generation}")
+print(f"Best Solution: {genome_to_things(population[0], things)}")
