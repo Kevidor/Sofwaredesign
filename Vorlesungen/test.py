@@ -18,8 +18,8 @@ things = []
 def generate_genome(lenght: int) -> Genome:
     return choices([0, 1], k=lenght)
 
-def generate_population(size: int, genome_lenght: int) -> Population:
-    return [generate_genome(genome_lenght) for _ in range(size)]
+def generate_population(size: int, genome_length: int) -> Population:
+    return [generate_genome(genome_length) for _ in range(size)]
 
 def fitness(genome: Genome, things: List[Thing], weight_limit: int) -> int:
     if len(genome) != len(things):
