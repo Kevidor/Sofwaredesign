@@ -1,36 +1,117 @@
-import itertools as itt
+from functools import partial
+from collections import namedtuple
+from random import choices, randint, randrange, random
+from typing import List, Callable, Tuple
 
-def knapsack(values, weights, capacity):
-    n = len(values)  # Anzahl der Objekte
-    # Tabelle zur Speicherung der maximalen Werte
-    dp = [[0 for _ in range(capacity + 1)] for _ in range(n + 1)]
-    
-    # Dynamische Programmierung, um die Tabelle zu füllen
-    for i in range(1, n + 1):
-        for w in range(1, capacity + 1):
-            if weights[i - 1] <= w:  # Objekt passt in den Rucksack
-                dp[i][w] = max(dp[i - 1][w], dp[i - 1][w - weights[i - 1]] + values[i - 1])
-            else:  # Objekt passt nicht in den Rucksack
-                dp[i][w] = dp[i - 1][w]
-    
-    # Maximaler Wert im Rucksack
-    max_value = dp[n][capacity]
-    
-    # Objekte rekonstruieren
-    w = capacity
-    selected_items = []
-    for i in range(n, 0, -1):
-        if dp[i][w] != dp[i - 1][w]:  # Objekt wurde ausgewählt
-            selected_items.append(i - 1)  # Index des Objekts
-            w -= weights[i - 1]
-    
-    return max_value, selected_items
+Genome = List[int]
+Population = List[Genome]
+FitnessFunc = Callable[[Genome], int]
+PopulateFunc = Callable[[], Population]
+SelectionFunc = Callable[[Population, FitnessFunc], Tuple[Genome, Genome]]
+CrossoverFunc = Callable[[Genome, Genome], Tuple[Genome, Genome]]
+MutationFunc = Callable[[Genome], Genome]
 
-# Beispiel
-max_weight = 15
-weights =  [12, 2, 1, 4, 1]
-values =  [4, 2, 1, 10, 2]
+Thing = namedtuple('Thing', ['value', 'weight'])
+things = []
 
-max_value, selected_items = knapsack(values, weights, max_weight)
-print("Maximaler Wert:", max_value)
-print("Ausgewählte Objekte:", selected_items)
+
+def generate_genome(lenght: int) -> Genome:
+    return choices([0, 1], k=lenght)
+
+def generate_population(size: int, genome_lenght: int) -> Population:
+    return [generate_genome(genome_lenght) for _ in range(size)]
+
+def fitness(genome: Genome, things: List[Thing], weight_limit: int) -> int:
+    if len(genome) != len(things):
+        raise ValueError("genome and things must be of the same lenght")
+    
+    weight = 0
+    value = 0
+
+    for i, things in enumerate(things):
+        if genome[i] == 1:
+            weight += things.weight
+            value += things.value
+
+            if weight > weight_limit:
+                return 0
+    return value
+
+def selection_pair(population: Population, fitness_func: FitnessFunc) -> Population:
+    return choices(
+        population=population,
+        weights=[fitness_func(genome) for genome in population],
+        k=2
+    )
+
+def single_point_crossover(a: Genome, b: Genome) -> Tuple[Genome, Genome]:
+    if len(a) != len(b):
+        raise ValueError("Genome a and b must be of same length")
+    
+    length = len(a)
+    if length < 2:
+        return a, b
+
+    p = randint(1, length -1)
+    return a[0:p] + b[p:], b[0:p] + a[p:]
+
+def mutation(genome: Genome, num: int = 1, probability: float = 0.5) -> Genome:
+    for _ in range(num):
+        index = randrange(len(genome))
+        genome[index] = genome[index] if random() > probability else abs(genome[index] - 1)
+
+def run_evolution(
+        populate_func: PopulateFunc,
+        fitness_func: FitnessFunc,
+        fitness_limt: int,
+        selection_func: SelectionFunc = selection_pair,
+        crossover_func: CrossoverFunc = single_point_crossover,
+        mutation_func: MutationFunc = mutation,
+        generation_limit: int = 100
+) -> Tuple[Population, int]:
+    population = populate_func()
+
+    for i in range(generation_limit):
+        population = sorted(
+            population,
+            key= lambda genome: fitness_func(generate_genome),
+            reverse= True
+        )
+
+        if fitness_func(population[0]) >= fitness_limt:
+            break
+
+        next_generation = population[0:2]
+
+        for j in range(int(len(population) / 2) - 1):
+            parents = selection_func(population, fitness_func)
+            offspring_a, offspring_b = crossover_func(parents[0], parents[1])
+            offspring_a = mutation_func(offspring_a)
+            offspring_b = mutation_func(offspring_b)
+            next_generation += [offspring_a, offspring_b]
+        population = next_generation
+
+        population = sorted(
+            population,
+            key= lambda genome: fitness_func(generate_genome),
+            reverse= True
+        )
+
+        return population
+    
+
+    max_weight = 15
+    weights =  [12, 2, 1, 4, 1]
+    values =  [4, 2, 1, 10, 2]
+
+    for i, j in zip(values, weights):
+        things.append(Thing(i, j))
+
+    population, generation = run_evolution(
+        populate_func=partial(
+            generate_population, size= 10, genome_length= len(things)
+        ),
+        fitness_func=partial(
+            fitness, things=things, weightlimit=max_weight
+        )
+    )
