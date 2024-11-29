@@ -63,7 +63,7 @@ def mutation(genome: Genome, num: int = 1, probability: float = 0.5) -> Genome:
 def run_evolution(
         populate_func: PopulateFunc,
         fitness_func: FitnessFunc,
-        fitness_limt: int,
+        fitness_limit: int,
         selection_func: SelectionFunc = selection_pair,
         crossover_func: CrossoverFunc = single_point_crossover,
         mutation_func: MutationFunc = mutation,
@@ -78,7 +78,7 @@ def run_evolution(
             reverse= True
         )
 
-        if fitness_func(population[0]) >= fitness_limt:
+        if fitness_func(population[0]) >= fitness_limit:
             break
 
         next_generation = population[0:2]
@@ -113,7 +113,9 @@ population, generation = run_evolution(
     ),
     fitness_func=partial(
         fitness, things=things, weightlimit=max_weight
-    )
+    ),
+    fitness_limit=sum(weights),
+    generation_limit=100
 )
 
 def genome_to_things(genome: Genome, things: List[Thing]) -> List[Thing]:
