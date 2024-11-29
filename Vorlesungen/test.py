@@ -59,6 +59,7 @@ def mutation(genome: Genome, num: int = 1, probability: float = 0.5) -> Genome:
     for _ in range(num):
         index = randrange(len(genome))
         genome[index] = genome[index] if random() > probability else abs(genome[index] - 1)
+    return genome
 
 def run_evolution(
         populate_func: PopulateFunc,
@@ -68,11 +69,11 @@ def run_evolution(
         crossover_func: CrossoverFunc = single_point_crossover,
         mutation_func: MutationFunc = mutation,
         generation_limit: int = 100
-        ) -> Tuple[Population, int]:
+    ) -> Tuple[Population, int]:
     population = populate_func()
 
     for i in range(generation_limit):
-        population = sorted(population, key=lambda genome: fitness_func(genome), reverse=True)
+        population = sorted(population, key= lambda genome: fitness_func(genome), reverse= True)
 
         if fitness_func(population[0]) >= fitness_limit:
             break
@@ -85,10 +86,11 @@ def run_evolution(
             offspring_a = mutation_func(offspring_a)
             offspring_b = mutation_func(offspring_b)
             next_generation += [offspring_a, offspring_b]
-
         population = next_generation
 
-    return population, i
+        population = sorted(population, key= lambda genome: fitness_func(genome), reverse= True)
+
+        return population, i
     
 
 max_weight = 15
