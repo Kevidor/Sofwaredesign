@@ -93,7 +93,7 @@ def run_evolution(
 
         population = sorted(
             population,
-            key= lambda genome: fitness_func(generate_genome),
+            key= lambda genome: fitness_func(genome),
             reverse= True
         )
 
