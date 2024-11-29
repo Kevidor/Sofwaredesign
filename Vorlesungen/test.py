@@ -112,7 +112,7 @@ population, generation = run_evolution(
         generate_population, size= 10, genome_length= len(things)
     ),
     fitness_func=partial(
-        fitness, things=things, weightlimit=max_weight
+        fitness, things=things, weight_limit=max_weight
     ),
     fitness_limit=sum(weights),
     generation_limit=100
