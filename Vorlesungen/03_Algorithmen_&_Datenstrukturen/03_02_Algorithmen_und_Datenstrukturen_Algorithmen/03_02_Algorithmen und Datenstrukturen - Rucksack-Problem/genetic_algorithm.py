@@ -75,8 +75,8 @@ def run_evolution(
     for i in range(generation_limit):
         population = sorted(population, key= lambda genome: fitness_func(genome), reverse= True)
 
-        if fitness_func(population[0]) >= fitness_limit:
-            break
+        # if fitness_func(population[0]) >= fitness_limit:
+            # break
 
         next_generation = population[0:2]
 
@@ -86,11 +86,10 @@ def run_evolution(
             offspring_a = mutation_func(offspring_a)
             offspring_b = mutation_func(offspring_b)
             next_generation += [offspring_a, offspring_b]
+
         population = next_generation
 
-        population = sorted(population, key= lambda genome: fitness_func(genome), reverse= True)
-
-        return population, i
+    return [population, i]
     
 
 max_weight = 850
