@@ -40,4 +40,3 @@ best_value, best_combo = brute_force(objekte)
 
 print(f"Value: {best_value} mit der Combo {best_combo}")
 
-        
