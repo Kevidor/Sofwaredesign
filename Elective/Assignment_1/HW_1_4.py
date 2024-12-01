@@ -15,6 +15,7 @@ input_binary = input("Enter a sequence of comma separated 4 digit binary numbers
 input_binary = input_binary.split(",")
 output_binary =  []
 for binary in input_binary:
+    # Converts the binary to a decimal and then checks if it's divdeable by 5
     if int(binary, 2) % 5 == 0:
         output_binary.append(binary)
 print(output_binary)

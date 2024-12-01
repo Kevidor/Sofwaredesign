@@ -9,6 +9,8 @@ printed in a comma-separated sequence on a single line.
 """
 
 suit_nums = []
+# iterates through range and checks each iteration if the contitions are met
+# if true appends it to suit_num (suitable numbers)
 for num in range(2000, 3201):
     if (num % 11 == 0 and not num % 23 == 0):
         suit_nums.append(num)

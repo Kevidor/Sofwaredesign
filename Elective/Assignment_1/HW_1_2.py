@@ -11,6 +11,6 @@ Example Output: bag,hello,world
 """
 
 input_text = input("Enter a comma separated sequence of words: ")
-input_text = input_text.split(",")
-input_text.sort()
+input_text = input_text.split(",") # Splits text at each komma (,) and appends elements in a list
+input_text.sort() # Sorts a list alphabetically
 print(input_text)

@@ -8,6 +8,7 @@ the list.
 """
 
 def squares_to_20():
+    # iterates through 1 to 20 and squares up the number each iteration
     squares = [x**2 for x in range(1, 21)]
     print(squares[-6:-1])
 

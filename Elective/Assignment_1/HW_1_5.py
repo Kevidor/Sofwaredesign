@@ -10,6 +10,8 @@ printed in a comma-separated sequence on a single line.
 
 output_text = []
 for num in range(1000, 3001):
+    # Iterates through all digits of a number and checks if the the digits is even
+    # if it is append to output_text
     if all(int(digit) % 2 == 0 for digit in str(num)):
         output_text.append(num)
 
