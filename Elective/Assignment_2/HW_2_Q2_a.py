@@ -13,6 +13,12 @@ Expected Output:
 4444
 55555
 """
+# Solution with nested for-loop
+for i in range(1, 6):
+    for _ in range(i):
+        print(i, end="")
+    print("")
 
+# Solution with one for loop and clever chasting of variables
 for i in range(1, 6):
     print(str(i) * i)
