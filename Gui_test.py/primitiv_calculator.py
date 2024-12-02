@@ -38,6 +38,7 @@ class Calculator(QMainWindow):
         button_text = clicked_button.text() # type: ignore
         if button_text == "=":
             self.result = eval(self.string_buffer)
+            self.string_buffer = str(self.result)
             self.label.setText(str(self.result))
         else:
             self.string_buffer += str(button_text)
