@@ -1,0 +1,5 @@
+Computer Name: PC-Kevin
+Date of Test: 2024-11-10 20:44:21
+Bubble Sort Time: 7.211025 seconds
+Quick Sort Time: 0.018573 seconds
+

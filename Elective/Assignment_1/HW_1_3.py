@@ -13,6 +13,7 @@ Example Output: again and hello makes perfect practice world
 input_text = input("Enter equence of whitespace separated words: ")
 input_text = input_text.split(" ")
 output_text = []
+# Iterates through the list and appends the words to output_text if the don't already exit in the output_text
 for word in input_text:
     if word in output_text:
         continue
