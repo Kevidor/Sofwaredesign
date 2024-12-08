@@ -71,8 +71,10 @@ def determine_season(month: str, day: int) -> str:
         return "Autumn"
     else:
         return "Invalid date"
-    
-month = input("Give me a month (int or str): ")
-day = input("Give me a day (int): ")
 
-print(determine_season(month= month, day= day))
+# Example for the determine_season function
+if __name__ == "__main__":  
+    month = input("Give me a month (int or str): ")
+    day = input("Give me a day (int): ")
+
+    print(determine_season(month= month, day= day))

@@ -19,6 +19,8 @@ buzz
 ...  
 """
 
+# Iterates through the range and checks its for the required conditions to either 
+# print FizzBuzz, Fizz or Buzz
 for i in range(51):
     if i % 3 == 0 and i % 5 == 0:
         print("FizzBuzz")

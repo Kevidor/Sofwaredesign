@@ -13,4 +13,5 @@ Create a flat list of all the values of the said flat dictionary:
 
 people_dict = {'Theodore': 19, 'Roxanne': 22, 'Mathew': 21, 'Betty': 20}
 
+# Prints out all the values of the dict
 print(list(people_dict.values()))

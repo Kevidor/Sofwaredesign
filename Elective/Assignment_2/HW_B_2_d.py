@@ -11,6 +11,7 @@ Expected Output:
 0 1 2 4 5  
 """
 
+# Iterates through range and continues with the loop if the number is either 3 or 6
 for i in range(7):
     if i == 3 or i == 6:
         continue

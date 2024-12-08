@@ -14,4 +14,5 @@ Finds the key of the maximum and minimum value of the said dictionary:
 
 people_dict = {'Theodore': 19, 'Roxanne': 22, 'Mathew': 21, 'Betty': 20}
 
+# Returns the Values of the dict and searched for the min an max values
 print(f"{max(people_dict, key= people_dict.get)} {min(people_dict, key= people_dict.get)}")
