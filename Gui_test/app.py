@@ -7,7 +7,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-    def contextMenuEvent(self, e):
+    def contextMenuEvent(self, e): #type: ignore
         context = QMenu(self)
         context.addAction(QAction("Hallo", self))
         context.addAction(QAction("DUHU", self))
