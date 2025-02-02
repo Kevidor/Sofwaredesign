@@ -8,9 +8,11 @@ class DatabaseConnector:
     def __new__(cls):
         if cls.__instance is None:
             cls.__instance = super().__new__(cls)
-            cls.__instance.path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database.json')
-
         return cls.__instance
+
+    def __init__(self):
+        if not hasattr(self, 'path'):
+            self.path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'database.json')
 
     def get_table(self, table_name: str):
         #return TinyDB(self.path, storage=serializer).table(table_name)

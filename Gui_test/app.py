@@ -1,7 +1,7 @@
 import sys
 
 from PySide6.QtGui import QAction
-from PySide6.QtWidgets import QApplication, QMainWindow, QMenu
+from PySide6.QtWidgets import QApplication, QMainWindow, QMenu, QPushButton
 from PySide6.QtCore import Qt
 
 class MainWindow(QMainWindow):
@@ -9,7 +9,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.show()
 
-        self.setContextMenuPolicy(Qt.CustomContextMenu) # type: ignore
+        self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.on_context_menu)
 
     def on_context_menu(self, pos):
