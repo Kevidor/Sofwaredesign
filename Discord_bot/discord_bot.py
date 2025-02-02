@@ -1,8 +1,10 @@
+import os
+import json
+import random
+import requests
 import discord
 from discord.ext import commands
 from discord import app_commands
-import json
-import requests
 
 # Set up bot intents
 intents = discord.Intents.default()
@@ -11,15 +13,8 @@ intents.message_content = True  # Required for message-based interactions
 # Create the bot instance with an App Command Tree
 class MyBot(commands.Bot):
     def __init__(self):
-        super().__init__(command_prefix="", intents=intents)  # No command prefix needed for slash commands
+        super().__init__(command_prefix="/", intents=intents)  # No command prefix needed for slash commands
         self.synced = False  # Ensure commands sync only once
-
-    async def setup_hook(self):
-        # Add commands to the bot tree
-        self.tree.add_command(ping)
-        self.tree.add_command(meme)
-        self.tree.add_command(insult_de)
-        self.tree.add_command(insult_en)
 
     async def on_ready(self):
         if not self.synced:
@@ -31,6 +26,14 @@ class MyBot(commands.Bot):
                 print(f"❌ Error syncing commands: {e}")
 
         print(f"✅ Bot is online as {self.user}!")
+
+with open("Gui_test/compliments.json", "r", encoding="utf-8") as file:
+    compliments_data = json.load(file)["compliments"]
+
+def get_random_compliment(name: str) -> str:
+    """Returns a random compliment with the user's name inserted."""
+    compliment = random.choice(compliments_data)
+    return compliment.replace("{name}", name)
 
 bot = MyBot()
 
@@ -46,11 +49,11 @@ async def meme(interaction: discord.Interaction):
     try:
         json_data = response.json()
         await interaction.response.send_message(json_data.get("url"))
-    except json.JSONDecodeError as e:
+    except requests.exceptions.JSONDecodeError as e:
         await interaction.response.send_message("❌ Failed to load meme.", ephemeral=True)
         print(f"Error decoding JSON: {e}")
 
-# 😈 INSULT COMMAND (DE) - with Autocomplete
+# 😈 INSULT COMMAND (DE)
 @app_commands.command(name="insult_de", description="Beleidigt einen erwähnten Nutzer auf Deutsch")
 @app_commands.describe(member="Wen möchtest du beleidigen?")
 async def insult_de(interaction: discord.Interaction, member: discord.Member):
@@ -58,12 +61,12 @@ async def insult_de(interaction: discord.Interaction, member: discord.Member):
     try:
         json_insult_data = insult.json()
         insult_str = json_insult_data.get("insult")
-        await interaction.response.send_message(f"😈 Hey {member.mention}, du {insult_str}!")
+        await interaction.response.send_message(f"😡 Hey {member.mention}, du {insult_str}!")
     except Exception as e:
         await interaction.response.send_message("❌ Fehler beim Abrufen der Beleidigung.", ephemeral=True)
         print(f"Error insult not found: {e}")
 
-# 😈 INSULT COMMAND (EN) - with Autocomplete
+# 😈 INSULT COMMAND (EN)
 @app_commands.command(name="insult_en", description="Insult a mentioned user in English")
 @app_commands.describe(member="Who do you want to insult?")
 async def insult_en(interaction: discord.Interaction, member: discord.Member):
@@ -71,10 +74,25 @@ async def insult_en(interaction: discord.Interaction, member: discord.Member):
     try:
         json_insult_data = insult.json()
         insult_str = json_insult_data.get("insult")
-        await interaction.response.send_message(f"😈 Hey {member.mention}, {insult_str}")
+        await interaction.response.send_message(f"😡 Hey {member.mention}, {insult_str}")
     except Exception as e:
         await interaction.response.send_message("❌ Failed to retrieve insult.", ephemeral=True)
         print(f"Error insult not found: {e}")
 
+# 😊 COMPLIMENT COMMAND (EN)
+@app_commands.command(name="compliment_en", description="Give a compliment to a mentioned user in English")
+@app_commands.describe(member="Who do you want to compliment?")
+async def compliment_en(interaction: discord.Interaction, member: discord.Member):
+    compliment = get_random_compliment(member.mention)
+    await interaction.response.send_message(f"😊 {compliment}")
+
+# 🔥 Füge die Befehle zum Bot hinzu
+bot.tree.add_command(ping)
+bot.tree.add_command(meme)
+bot.tree.add_command(insult_de)
+bot.tree.add_command(insult_en)
+bot.tree.add_command(compliment_en)
+
 # 🔑 RUN THE BOT
-bot.run("")
+bot_token = os.getenv("DISCORD_BOT_TOKEN")
+bot.run(str(bot_token))
